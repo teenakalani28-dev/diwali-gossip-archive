@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import './index.css';
@@ -24,7 +25,7 @@ export default function App() {
   const [guestName, setGuestName] = useState('');
   const [caption, setCaption] = useState(captions[0]);
   const [files, setFiles] = useState([]);
-const [uploadProgress, setUploadProgress] = useState('');
+  const [uploadProgress, setUploadProgress] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -91,7 +92,9 @@ const [uploadProgress, setUploadProgress] = useState('');
       if (error || !isAdmin) {
         await supabase.auth.signOut();
         setAdminUser(null);
-        setAdminMessage('This account is not authorised for the archive.');
+        setAdminMessage(
+          'This account is not authorised for the archive.'
+        );
         return;
       }
 
@@ -117,15 +120,16 @@ const [uploadProgress, setUploadProgress] = useState('');
 
       if (error) throw error;
 
-      const { data: isAdmin, error: adminError } = await supabase.rpc(
-        'is_archive_admin'
-      );
+      const { data: isAdmin, error: adminError } =
+        await supabase.rpc('is_archive_admin');
 
       if (adminError) throw adminError;
 
       if (!isAdmin) {
         await supabase.auth.signOut();
-        throw new Error('This account is not authorised for the archive.');
+        throw new Error(
+          'This account is not authorised for the archive.'
+        );
       }
 
       setAdminUser(data.user);
@@ -216,73 +220,117 @@ const [uploadProgress, setUploadProgress] = useState('');
   async function uploadPhoto(e) {
     e.preventDefault();
 
-    if (!file) {
-      setMessage('Please choose a photo first.');
+    const form = e.currentTarget;
+
+    if (files.length === 0) {
+      setMessage('Please choose at least one photo.');
       return;
     }
 
-    if (!file.type.startsWith('image/')) {
-      setMessage('Please select an image file.');
+    if (files.length > 10) {
+      setMessage('Maximum 10 photos per upload.');
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      setMessage('Photo must be smaller than 10 MB.');
-      return;
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) {
+        setMessage('Please select image files only.');
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        setMessage(`${file.name} exceeds the 10 MB limit.`);
+        return;
+      }
     }
 
     setLoading(true);
     setMessage('');
 
+    let successfulUploads = 0;
+
     try {
-      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '-');
-      const path = `${Date.now()}-${safeName}`;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
 
-      const { error: uploadError } = await supabase.storage
-        .from('diwali-photos')
-        .upload(path, file, { contentType: file.type });
+        setUploadProgress(
+          `UPLOADING ${i + 1} OF ${files.length}...`
+        );
 
-      if (uploadError) throw uploadError;
+        const safeName = file.name.replace(
+          /[^a-zA-Z0-9.-]/g,
+          '-'
+        );
 
-      const { data: urlData } = supabase.storage
-        .from('diwali-photos')
-        .getPublicUrl(path);
+        const path = `${Date.now()}-${i}-${safeName}`;
 
-      const { error: insertError } = await supabase
-        .from('Photos')
-        .insert({
-          image_url: urlData.publicUrl,
-          caption,
-          Guest_name: guestName.trim() || 'Anonymous',
-          likes: 0,
-          Featured: false
-        });
+        const { error: uploadError } = await supabase.storage
+          .from('diwali-photos')
+          .upload(path, file, { contentType: file.type });
 
-      if (insertError) throw insertError;
+        if (uploadError) throw uploadError;
 
-      setFile(null);
+        const { data: urlData } = supabase.storage
+          .from('diwali-photos')
+          .getPublicUrl(path);
+
+        const { error: insertError } = await supabase
+          .from('Photos')
+          .insert({
+            image_url: urlData.publicUrl,
+            caption,
+            Guest_name: guestName.trim() || 'Anonymous',
+            likes: 0,
+            Featured: false
+          });
+
+        if (insertError) throw insertError;
+
+        successfulUploads++;
+      }
+
+      setFiles([]);
       setGuestName('');
       setCaption(captions[0]);
-      e.target.reset();
-      setMessage('YOUR EVIDENCE IS NOW ON RECORD.');
+      form.reset();
+
+      setMessage(
+        `${successfulUploads} PHOTOS ADDED TO THE ARCHIVE.`
+      );
+
       await loadPhotos();
     } catch (error) {
       console.error(error);
-      setMessage(`Upload failed: ${error.message}`);
+
+      setMessage(
+        `${successfulUploads} uploaded. Remaining uploads stopped: ${error.message}`
+      );
+
+      await loadPhotos();
     } finally {
       setLoading(false);
+      setUploadProgress('');
     }
   }
 
   if (adminMode) {
     return (
-      <main className="archive" style={{ minHeight: '100vh', padding: '32px 20px' }}>
+      <main
+        className="archive"
+        style={{ minHeight: '100vh', padding: '32px 20px' }}
+      >
         <section style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <p className="eyebrow">THE OFFICIAL AFTER-PARTY RECORD</p>
+          <p className="eyebrow">
+            THE OFFICIAL AFTER-PARTY RECORD
+          </p>
+
           <h1 style={{ marginBottom: '12px' }}>
             ARCHIVE <span>ADMIN</span>
           </h1>
-          <p className="subtitle">Private access. Behind the evidence.</p>
+
+          <p className="subtitle">
+            Private access. Behind the evidence.
+          </p>
 
           {adminChecking ? (
             <p>Checking access...</p>
@@ -322,14 +370,16 @@ const [uploadProgress, setUploadProgress] = useState('');
             </form>
           ) : (
             <>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                gap: '12px',
-                margin: '30px 0'
-              }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '12px',
+                  margin: '30px 0'
+                }}
+              >
                 <div>
                   <p className="section-kicker">CONTROL ROOM</p>
                   <h2>{photos.length} photos on record</h2>
@@ -404,24 +454,41 @@ const [uploadProgress, setUploadProgress] = useState('');
   return (
     <main className="archive">
       <header className="hero">
-        <p className="eyebrow">THE OFFICIAL AFTER-PARTY RECORD</p>
-        <h1>DIWALI KI<br /><span>GOSSIP ARCHIVE</span></h1>
-        <p className="subtitle">Proof that we actually touched grass.</p>
+        <p className="eyebrow">
+          THE OFFICIAL AFTER-PARTY RECORD
+        </p>
+
+        <h1>
+          DIWALI KI<br />
+          <span>GOSSIP ARCHIVE</span>
+        </h1>
+
+        <p className="subtitle">
+          Proof that we actually touched grass.
+        </p>
+
         <div className="live">
           <span className="live-dot" /> LIVE ARCHIVE
         </div>
-        <div className="photo-count">{photos.length} MOMENTS ON RECORD</div>
+
+        <div className="photo-count">
+          {photos.length} MOMENTS ON RECORD
+        </div>
       </header>
 
       <section className="upload-section">
         <p className="section-kicker">GOT RECEIPTS?</p>
         <h2>Put it on record.</h2>
+
         <p className="description">
           Upload the evidence. The good, the chaotic and the questionable.
         </p>
 
         <form onSubmit={uploadPhoto} className="upload-form">
-          <label className="field-label">YOUR NAME (OPTIONAL)</label>
+          <label className="field-label">
+            YOUR NAME (OPTIONAL)
+          </label>
+
           <input
             value={guestName}
             onChange={e => setGuestName(e.target.value)}
@@ -429,27 +496,61 @@ const [uploadProgress, setUploadProgress] = useState('');
             maxLength={50}
           />
 
-          <label className="field-label">PICK YOUR CAPTION</label>
-          <select value={caption} onChange={e => setCaption(e.target.value)}>
+          <label className="field-label">
+            PICK YOUR CAPTION
+          </label>
+
+          <select
+            value={caption}
+            onChange={e => setCaption(e.target.value)}
+          >
             {captions.map(item => (
-              <option key={item} value={item}>{item}</option>
+              <option key={item} value={item}>
+                {item}
+              </option>
             ))}
           </select>
 
-          <label className="field-label">UPLOAD YOUR EVIDENCE</label>
+          <label className="field-label">
+            UPLOAD YOUR EVIDENCE (UP TO 10 PHOTOS)
+          </label>
+
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp"
-            onChange={e => setFile(e.target.files?.[0] || null)}
+            multiple
+            onChange={e => {
+              const selected = Array.from(e.target.files || []);
+
+              if (selected.length > 10) {
+                setMessage('Maximum 10 photos at a time.');
+                setFiles([]);
+                e.target.value = '';
+                return;
+              }
+
+              setFiles(selected);
+              setMessage('');
+            }}
           />
 
-          {file && <p className="file-name">{file.name}</p>}
+          {files.length > 0 && (
+            <p className="file-name">
+              {files.length} photos selected
+            </p>
+          )}
+
+          {uploadProgress && (
+            <p className="status-message">{uploadProgress}</p>
+          )}
 
           <button type="submit" disabled={loading}>
             {loading ? 'UPLOADING...' : 'ADD TO THE ARCHIVE'}
           </button>
 
-          {message && <p className="status-message">{message}</p>}
+          {message && (
+            <p className="status-message">{message}</p>
+          )}
         </form>
       </section>
 
@@ -459,6 +560,7 @@ const [uploadProgress, setUploadProgress] = useState('');
             <p className="section-kicker">THE EVIDENCE</p>
             <h2>The night, documented.</h2>
           </div>
+
           <span>{photos.length} PHOTOS</span>
         </div>
 
@@ -475,6 +577,7 @@ const [uploadProgress, setUploadProgress] = useState('');
                   alt={photo.caption || 'Diwali memory'}
                   loading="lazy"
                 />
+
                 <div className="photo-info">
                   <p>{photo.caption}</p>
                   <span>{photo.Guest_name || 'Anonymous'}</span>
