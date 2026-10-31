@@ -1,4 +1,5 @@
 
+
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import './index.css';
@@ -23,8 +24,7 @@ const captions = [
 export default function App() {
   const [photos, setPhotos] = useState([]);
   const [guestName, setGuestName] = useState('');
-  const [caption, setCaption] = useState(captions[0]);
-  const [files, setFiles] = useState([]);
+  const [selectedPhotos, setSelectedPhotos] = useState([]);
   const [uploadProgress, setUploadProgress] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -46,7 +46,10 @@ export default function App() {
     }
 
     window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
   }, []);
 
   async function loadPhotos() {
@@ -55,19 +58,27 @@ export default function App() {
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (!error) setPhotos(data || []);
-    else console.error('Photo loading error:', error.message);
+    if (!error) {
+      setPhotos(data || []);
+    } else {
+      console.error('Photo loading error:', error.message);
+    }
   }
 
   useEffect(() => {
     loadPhotos();
+
     const timer = setInterval(loadPhotos, 5000);
+
     return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
-    if (adminMode) checkAdminSession();
-    else setAdminUser(null);
+    if (adminMode) {
+      checkAdminSession();
+    } else {
+      setAdminUser(null);
+    }
   }, [adminMode]);
 
   async function checkAdminSession() {
@@ -127,6 +138,7 @@ export default function App() {
 
       if (!isAdmin) {
         await supabase.auth.signOut();
+
         throw new Error(
           'This account is not authorised for the archive.'
         );
@@ -134,6 +146,7 @@ export default function App() {
 
       setAdminUser(data.user);
       setAdminPassword('');
+
       await loadPhotos();
     } catch (error) {
       setAdminMessage(error.message);
@@ -144,8 +157,10 @@ export default function App() {
 
   async function adminLogout() {
     await supabase.auth.signOut();
+
     setAdminUser(null);
     setAdminMessage('');
+
     window.location.hash = '';
   }
 
@@ -162,6 +177,7 @@ export default function App() {
       if (error) throw error;
 
       await loadPhotos();
+
       setAdminMessage(
         photo.Featured ? 'Photo unfeatured.' : 'Photo featured.'
       );
@@ -209,6 +225,7 @@ export default function App() {
       if (deleteError) throw deleteError;
 
       await loadPhotos();
+
       setAdminMessage('Photo deleted from the archive.');
     } catch (error) {
       setAdminMessage(`Delete failed: ${error.message}`);
@@ -217,24 +234,57 @@ export default function App() {
     }
   }
 
+  function handlePhotoSelection(e) {
+    const selected = Array.from(e.target.files || []);
+
+    if (selected.length > 10) {
+      setMessage('Maximum 10 photos at a time.');
+      setSelectedPhotos([]);
+      e.target.value = '';
+      return;
+    }
+
+    setSelectedPhotos(
+      selected.map(file => ({
+        file,
+        caption: captions[0],
+        previewUrl: URL.createObjectURL(file)
+      }))
+    );
+
+    setMessage('');
+  }
+
+  function updatePhotoCaption(index, newCaption) {
+    setSelectedPhotos(current =>
+      current.map((photo, i) =>
+        i === index
+          ? { ...photo, caption: newCaption }
+          : photo
+      )
+    );
+  }
+
   async function uploadPhoto(e) {
     e.preventDefault();
 
-    const form = e.currentTarget;
-
-    if (files.length === 0) {
+    if (selectedPhotos.length === 0) {
       setMessage('Please choose at least one photo.');
       return;
     }
 
-    if (files.length > 10) {
+    if (selectedPhotos.length > 10) {
       setMessage('Maximum 10 photos per upload.');
       return;
     }
 
-    for (const file of files) {
-      if (!file.type.startsWith('image/')) {
-        setMessage('Please select image files only.');
+    for (const photo of selectedPhotos) {
+      const file = photo.file;
+
+      if (
+        !['image/jpeg', 'image/png', 'image/webp'].includes(file.type)
+      ) {
+        setMessage(`${file.name} is not a supported image format.`);
         return;
       }
 
@@ -250,11 +300,12 @@ export default function App() {
     let successfulUploads = 0;
 
     try {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+      for (let i = 0; i < selectedPhotos.length; i++) {
+        const photo = selectedPhotos[i];
+        const file = photo.file;
 
         setUploadProgress(
-          `UPLOADING ${i + 1} OF ${files.length}...`
+          `UPLOADING ${i + 1} OF ${selectedPhotos.length}...`
         );
 
         const safeName = file.name.replace(
@@ -266,7 +317,9 @@ export default function App() {
 
         const { error: uploadError } = await supabase.storage
           .from('diwali-photos')
-          .upload(path, file, { contentType: file.type });
+          .upload(path, file, {
+            contentType: file.type
+          });
 
         if (uploadError) throw uploadError;
 
@@ -278,7 +331,7 @@ export default function App() {
           .from('Photos')
           .insert({
             image_url: urlData.publicUrl,
-            caption,
+            caption: photo.caption,
             Guest_name: guestName.trim() || 'Anonymous',
             likes: 0,
             Featured: false
@@ -289,10 +342,14 @@ export default function App() {
         successfulUploads++;
       }
 
-      setFiles([]);
+      selectedPhotos.forEach(photo => {
+        URL.revokeObjectURL(photo.previewUrl);
+      });
+
+      setSelectedPhotos([]);
       setGuestName('');
-      setCaption(captions[0]);
-      form.reset();
+
+      e.currentTarget.reset();
 
       setMessage(
         `${successfulUploads} PHOTOS ADDED TO THE ARCHIVE.`
@@ -317,7 +374,10 @@ export default function App() {
     return (
       <main
         className="archive"
-        style={{ minHeight: '100vh', padding: '32px 20px' }}
+        style={{
+          minHeight: '100vh',
+          padding: '32px 20px'
+        }}
       >
         <section style={{ maxWidth: '900px', margin: '0 auto' }}>
           <p className="eyebrow">
@@ -338,11 +398,15 @@ export default function App() {
             <form
               onSubmit={adminLogin}
               className="upload-form"
-              style={{ maxWidth: '440px', margin: '35px auto' }}
+              style={{
+                maxWidth: '440px',
+                margin: '35px auto'
+              }}
             >
               <h2>Admin login</h2>
 
               <label className="field-label">EMAIL</label>
+
               <input
                 type="email"
                 value={adminEmail}
@@ -352,6 +416,7 @@ export default function App() {
               />
 
               <label className="field-label">PASSWORD</label>
+
               <input
                 type="password"
                 value={adminPassword}
@@ -478,6 +543,7 @@ export default function App() {
 
       <section className="upload-section">
         <p className="section-kicker">GOT RECEIPTS?</p>
+
         <h2>Put it on record.</h2>
 
         <p className="description">
@@ -497,21 +563,6 @@ export default function App() {
           />
 
           <label className="field-label">
-            PICK YOUR CAPTION
-          </label>
-
-          <select
-            value={caption}
-            onChange={e => setCaption(e.target.value)}
-          >
-            {captions.map(item => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-
-          <label className="field-label">
             UPLOAD YOUR EVIDENCE (UP TO 10 PHOTOS)
           </label>
 
@@ -519,25 +570,81 @@ export default function App() {
             type="file"
             accept="image/jpeg,image/png,image/webp"
             multiple
-            onChange={e => {
-              const selected = Array.from(e.target.files || []);
-
-              if (selected.length > 10) {
-                setMessage('Maximum 10 photos at a time.');
-                setFiles([]);
-                e.target.value = '';
-                return;
-              }
-
-              setFiles(selected);
-              setMessage('');
-            }}
+            onChange={handlePhotoSelection}
+            disabled={loading}
           />
 
-          {files.length > 0 && (
-            <p className="file-name">
-              {files.length} photos selected
-            </p>
+          {selectedPhotos.length > 0 && (
+            <div style={{ marginTop: '20px' }}>
+              <p className="field-label">
+                {selectedPhotos.length} PHOTOS SELECTED — ADD YOUR CAPTIONS
+              </p>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns:
+                    'repeat(auto-fit, minmax(140px, 1fr))',
+                  gap: '16px',
+                  marginTop: '12px'
+                }}
+              >
+                {selectedPhotos.map((photo, index) => (
+                  <div
+                    key={`${photo.file.name}-${photo.file.lastModified}-${index}`}
+                    style={{
+                      minWidth: 0,
+                      padding: '10px',
+                      background: 'rgba(255,255,255,0.65)',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(41,60,52,0.15)'
+                    }}
+                  >
+                    <img
+                      src={photo.previewUrl}
+                      alt={`Selected photo ${index + 1}`}
+                      style={{
+                        width: '100%',
+                        height: '130px',
+                        objectFit: 'cover',
+                        borderRadius: '6px',
+                        display: 'block',
+                        marginBottom: '10px'
+                      }}
+                    />
+
+                    <p
+                      style={{
+                        fontSize: '12px',
+                        margin: '0 0 8px',
+                        fontWeight: '600'
+                      }}
+                    >
+                      PHOTO {index + 1}
+                    </p>
+
+                    <select
+                      value={photo.caption}
+                      onChange={e =>
+                        updatePhotoCaption(index, e.target.value)
+                      }
+                      disabled={loading}
+                      aria-label={`Caption for photo ${index + 1}`}
+                      style={{
+                        width: '100%',
+                        minWidth: 0
+                      }}
+                    >
+                      {captions.map(item => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
           {uploadProgress && (
