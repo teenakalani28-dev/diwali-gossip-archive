@@ -1,9 +1,9 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Barlow+Condensed:wght@600;700;800;900&display=swap');
 
 :root {
   font-family: 'DM Sans', sans-serif;
-  color: #211512;
+  color: #153e2d;
   background: #fff8e9;
   font-synthesis: none;
 }
@@ -29,40 +29,60 @@ button, input, select {
   overflow: hidden;
 }
 
+/* HERO */
 .hero {
   position: relative;
   text-align: center;
-  padding: 75px 20px 55px;
-  background: #f52e78;
+  padding: 76px 20px 55px;
+  background: #124c38;
   color: #fff8e9;
-  border: 2px solid #211512;
-  box-shadow: 8px 8px 0 #211512;
+  border: 2px solid #17271d;
+  box-shadow: 8px 8px 0 #f47732;
+}
+
+.hero::before,
+.hero::after {
+  content: '✳';
+  position: absolute;
+  color: #ffd84d;
+  font-size: 42px;
+}
+
+.hero::before {
+  top: 20px;
+  left: 24px;
+}
+
+.hero::after {
+  bottom: 18px;
+  right: 24px;
 }
 
 .eyebrow, .section-kicker {
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: 3px;
   text-transform: uppercase;
 }
 
 .hero h1 {
-  margin: 24px 0 12px;
+  margin: 25px 0 14px;
   font-family: 'Barlow Condensed', sans-serif;
   font-size: clamp(58px, 12vw, 112px);
   font-weight: 900;
-  line-height: .82;
+  line-height: .84;
   letter-spacing: -3px;
 }
 
 .hero h1 span {
-  color: #ffe36b;
+  color: #ff4b96;
 }
 
 .subtitle {
+  color: #ffd84d;
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  font-size: 18px;
+  font-size: 19px;
 }
 
 .live {
@@ -70,10 +90,10 @@ button, input, select {
   align-items: center;
   gap: 8px;
   margin-top: 22px;
-  padding: 9px 15px;
-  color: #211512;
-  background: #ffe36b;
-  border: 1.5px solid #211512;
+  padding: 10px 16px;
+  color: #153e2d;
+  background: #ffd84d;
+  border: 1.5px solid #17271d;
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 1px;
@@ -83,41 +103,47 @@ button, input, select {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #e52b38;
+  background: #f42d83;
 }
 
 .photo-count {
   margin-top: 22px;
+  color: #fff8e9;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: 2px;
 }
 
+/* UPLOAD */
 .upload-section {
+  position: relative;
   margin: 55px auto;
   max-width: 600px;
-  padding: 35px;
-  background: #ffe36b;
-  border: 2px solid #211512;
-  box-shadow: 7px 7px 0 #211512;
+  padding: 36px;
+  background: #ffd84d;
+  border: 2px solid #17271d;
+  box-shadow: 7px 7px 0 #f42d83;
 }
 
 .section-kicker {
-  color: #d82b65;
+  color: #e85c27;
 }
 
-.upload-section h2, .gallery-heading h2 {
+.upload-section h2,
+.gallery-heading h2 {
   margin: 8px 0;
+  color: #124c38;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 43px;
+  font-size: 45px;
+  font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
 }
 
 .description {
-  color: #55443a;
+  color: #554a35;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .upload-form {
@@ -129,6 +155,7 @@ button, input, select {
 
 .field-label {
   margin-top: 10px;
+  color: #153e2d;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 1.5px;
@@ -139,17 +166,22 @@ button, input, select {
   width: 100%;
   padding: 14px;
   background: #fff8e9;
-  border: 1.5px solid #211512;
+  border: 1.5px solid #153e2d;
   border-radius: 0;
-  color: #211512;
+  color: #153e2d;
   outline: none;
+}
+
+.upload-form input:focus,
+.upload-form select:focus {
+  box-shadow: 3px 3px 0 #f42d83;
 }
 
 .upload-form input[type="file"] {
   width: 100%;
   padding: 12px;
   background: #fff8e9;
-  border: 1.5px dashed #211512;
+  border: 1.5px dashed #153e2d;
   font-size: 12px;
 }
 
@@ -161,10 +193,10 @@ button, input, select {
 .upload-form button {
   margin-top: 12px;
   padding: 17px;
-  background: #e72d70;
+  background: #f42d83;
   color: white;
-  border: 2px solid #211512;
-  box-shadow: 4px 4px 0 #211512;
+  border: 2px solid #17271d;
+  box-shadow: 4px 4px 0 #17271d;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 1px;
@@ -174,7 +206,7 @@ button, input, select {
 
 .upload-form button:hover {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 #211512;
+  box-shadow: 2px 2px 0 #17271d;
 }
 
 .upload-form button:disabled {
@@ -183,11 +215,13 @@ button, input, select {
 }
 
 .status-message {
+  color: #124c38;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 900;
   overflow-wrap: anywhere;
 }
 
+/* GALLERY */
 .gallery-section {
   margin: 70px 0;
 }
@@ -200,7 +234,15 @@ button, input, select {
   margin-bottom: 28px;
 }
 
+.gallery-heading h2 {
+  color: #124c38;
+}
+
 .gallery-heading > span {
+  padding: 8px 11px;
+  background: #f47732;
+  color: #fff8e9;
+  border: 1.5px solid #17271d;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 1px;
@@ -216,9 +258,9 @@ button, input, select {
   width: 100%;
   margin: 0 0 20px;
   background: #fff;
-  border: 1.5px solid #211512;
+  border: 1.5px solid #17271d;
   break-inside: avoid;
-  box-shadow: 4px 4px 0 #211512;
+  box-shadow: 4px 4px 0 #124c38;
 }
 
 .photo-card img {
@@ -235,35 +277,38 @@ button, input, select {
 
 .photo-info p {
   margin: 0 0 7px;
-  color: #d82b65;
+  color: #f42d83;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: .5px;
 }
 
 .photo-info span {
-  color: #6d5a4f;
+  color: #665c4d;
   font-size: 11px;
 }
 
 .empty-state {
   padding: 45px 20px;
-  background: #f9e6d3;
-  border: 1.5px dashed #211512;
+  background: #fce5d3;
+  border: 1.5px dashed #124c38;
   text-align: center;
   font-family: 'Playfair Display', serif;
   font-style: italic;
 }
 
+/* FOOTER */
 footer {
   padding: 30px 10px;
-  border-top: 2px solid #211512;
+  background: #124c38;
+  color: #fff8e9;
   text-align: center;
 }
 
 footer p {
+  color: #ffd84d;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 23px;
+  font-size: 25px;
   font-weight: 900;
 }
 
@@ -284,6 +329,11 @@ footer span {
 
   .hero h1 {
     letter-spacing: -2px;
+  }
+
+  .hero::before,
+  .hero::after {
+    font-size: 27px;
   }
 
   .upload-section {
