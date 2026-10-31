@@ -1,303 +1,38 @@
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Caveat:wght@500;600;700&display=swap');
-
-/* =================================
-   DIWALI GOSSIP ARCHIVE
-   Modern Indian Scrapbook Aesthetic
-================================= */
-
-:root {
-  --butter: #F6D978;
-  --moss: #777B4B;
-  --palm: #285B45;
-  --guava: #E99A9A;
-  --sunset: #E77D55;
-  --sangria: #762D49;
-  --sea: #A8D3C7;
-  --lagoon: #397F83;
-  --odyssey: #344B68;
-
-  --paper: #FFF9EF;
-  --cream: #F8F0DF;
-  --ink: #293C34;
-  --muted: #81796B;
-
-  font-family: 'DM Sans', sans-serif;
-  color: var(--ink);
-  background: var(--cream);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  background: var(--cream);
-}
-
-button, input, textarea, select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-/* =================================
-   PAGE BACKGROUND
-================================= */
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 8% 12%, rgba(233,154,154,.13), transparent 25%),
-    radial-gradient(circle at 90% 70%, rgba(168,211,199,.17), transparent 28%);
-}
-
-/* =================================
-   HERO / OPENING
-================================= */
-
-.hero {
-  min-height: 650px;
-  position: relative;
-  overflow: hidden;
-  padding: 75px 24px 85px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background: var(--butter);
-  isolation: isolate;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  width: 310px;
-  height: 390px;
-  left: -125px;
-  top: -90px;
-  background: var(--guava);
-  opacity: .8;
-  border-radius: 48% 52% 65% 35%;
-  transform: rotate(35deg);
-  z-index: -1;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  width: 290px;
-  height: 350px;
-  right: -110px;
-  bottom: -140px;
-  background: var(--sea);
-  border-radius: 50%;
-  transform: rotate(-25deg);
-  z-index: -1;
-}
-
-.hero h1 {
-  max-width: 900px;
-  margin: 22px auto;
-  color: var(--palm);
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(46px, 8vw, 92px);
-  font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -2.5px;
-}
-
-.hero p {
-  max-width: 540px;
-  color: var(--odyssey);
-  font-size: 15px;
-  line-height: 1.8;
-  letter-spacing: .04em;
-}
-
-.hero button {
-  margin-top: 25px;
-  padding: 15px 30px;
-  background: var(--sangria);
-  color: white;
-  border: 1px solid var(--sangria);
-  border-radius: 3px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .13em;
-  transition: .25s ease;
-}
-
-.hero button:hover {
-  background: var(--palm);
-  border-color: var(--palm);
-  transform: translateY(-3px);
-}
-
-/* =================================
-   UPLOAD SECTION
-================================= */
-
-.upload-section {
-  position: relative;
-  max-width: 760px;
-  margin: 65px auto;
-  padding: 38px;
-  background: var(--paper);
-  border: 1px solid rgba(119,123,75,.25);
-  border-radius: 4px;
-  box-shadow: 10px 12px 0 rgba(233,154,154,.22);
-}
-
-.upload-section h2 {
-  color: var(--sangria);
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(27px, 4vw, 40px);
-  font-weight: 500;
-}
-
-.upload-section p {
-  color: var(--muted);
-  line-height: 1.7;
-}
-
-.upload-section input,
-.upload-section textarea,
-.upload-section select {
-  width: 100%;
-  padding: 14px;
-  margin: 7px 0;
-  color: var(--ink);
-  background: #FFFCF6;
-  border: 1px solid #DED7C7;
-  border-radius: 3px;
-  outline: none;
-}
-
-.upload-section input:focus,
-.upload-section textarea:focus,
-.upload-section select:focus {
-  border-color: var(--lagoon);
-  box-shadow: 0 0 0 3px rgba(57,127,131,.12);
-}
-
-.upload-section button,
-.upload-section .upload-button {
-  padding: 14px 25px;
-  background: var(--palm);
-  color: white;
-  border: none;
-  border-radius: 3px;
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: .08em;
-  transition: .2s ease;
-}
-
-.upload-section button:hover,
-.upload-section .upload-button:hover {
-  background: var(--sangria);
-  transform: translateY(-2px);
-}
-
-/* =================================
-   GALLERY
-================================= */
-
-.gallery-section {
-  padding: 75px 28px 95px;
-  background: var(--cream);
-}
-
-.gallery-section h2 {
-  color: var(--palm);
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(34px, 5vw, 54px);
-  font-weight: 500;
-  text-align: center;
-  letter-spacing: -1px;
-}
-
-.gallery-section > p {
-  color: var(--muted);
-  text-align: center;
-  font-size: 13px;
-  letter-spacing: .06em;
-}
-
-.gallery-section .photo-grid,
-.gallery-section .gallery-grid {
-  max-width: 1180px;
-  margin: 48px auto;
-  column-count: 3;
-  column-gap: 28px;
-}
-
-/* =================================
-   POLAROID PHOTO CARDS
-================================= */
+/* RESTORE PHOTO PREVIEW STYLING */
 
 .photo-card {
-  position: relative;
   display: inline-block;
   width: 100%;
   break-inside: avoid;
-  margin: 0 0 32px;
-  padding: 11px 11px 25px;
-  background: var(--paper);
+  margin: 0 0 24px;
+  padding: 10px 10px 22px;
+  background: #FFF9EF;
   border: 1px solid #E6DDCF;
   border-radius: 2px;
-  box-shadow: 0 8px 20px rgba(48,54,40,.09);
-  transition: transform .3s ease, box-shadow .3s ease;
+  box-shadow: 0 5px 18px rgba(38, 40, 30, 0.09);
+  transition: transform .25s ease, box-shadow .25s ease;
 }
 
-.photo-card:nth-child(6n+1) {
-  transform: rotate(-2deg);
+.photo-card:nth-child(4n+1) {
+  transform: rotate(-1.5deg);
 }
 
-.photo-card:nth-child(6n+2) {
-  transform: rotate(1.5deg);
+.photo-card:nth-child(4n+2) {
+  transform: rotate(1.2deg);
 }
 
-.photo-card:nth-child(6n+3) {
-  transform: rotate(-.8deg);
+.photo-card:nth-child(4n+3) {
+  transform: rotate(-0.7deg);
 }
 
-.photo-card:nth-child(6n+4) {
-  transform: rotate(2deg);
-}
-
-.photo-card:nth-child(6n+5) {
-  transform: rotate(-1.2deg);
-}
-
-.photo-card:nth-child(6n) {
-  transform: rotate(.8deg);
+.photo-card:nth-child(4n) {
+  transform: rotate(1.7deg);
 }
 
 .photo-card:hover {
-  transform: rotate(0deg) translateY(-6px);
-  box-shadow: 0 16px 30px rgba(48,54,40,.16);
-  z-index: 2;
+  transform: rotate(0deg) translateY(-5px);
+  box-shadow: 0 12px 25px rgba(38, 40, 30, 0.14);
 }
 
 .photo-card img {
@@ -310,90 +45,9 @@ body::before {
 
 .photo-card p,
 .photo-card .caption {
-  margin: 0;
-  padding: 13px 4px 0;
+  color: #285B45;
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
   text-align: center;
-  color: var(--sangria);
-  font-family: 'Caveat', cursive;
-  font-size: 21px;
-}
-
-/* =================================
-   LINKS AND SMALL LABELS
-================================= */
-
-a {
-  color: var(--lagoon);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--sangria);
-}
-
-/* =================================
-   FOOTER
-================================= */
-
-footer {
-  padding: 42px 20px;
-  text-align: center;
-  color: var(--paper);
-  background: var(--palm);
-  font-size: 12px;
-  letter-spacing: .12em;
-}
-
-/* =================================
-   RESPONSIVE DESIGN
-================================= */
-
-@media (max-width: 760px) {
-  .hero {
-    min-height: 540px;
-    padding: 65px 22px;
-  }
-
-  .hero h1 {
-    font-size: clamp(43px, 12vw, 66px);
-    letter-spacing: -1.5px;
-  }
-
-  .upload-section {
-    margin: 35px 17px;
-    padding: 25px 20px;
-  }
-
-  .gallery-section {
-    padding: 55px 17px 70px;
-  }
-
-  .gallery-section .photo-grid,
-  .gallery-section .gallery-grid {
-    column-count: 2;
-    column-gap: 17px;
-    margin-top: 35px;
-  }
-
-  .photo-card {
-    padding: 8px 8px 18px;
-    margin-bottom: 21px;
-  }
-
-  .photo-card p,
-  .photo-card .caption {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 380px) {
-  .hero {
-    min-height: 480px;
-  }
-
-  .gallery-section .photo-grid,
-  .gallery-section .gallery-grid {
-    column-count: 2;
-    column-gap: 12px;
-  }
+  padding: 12px 4px 0;
 }
