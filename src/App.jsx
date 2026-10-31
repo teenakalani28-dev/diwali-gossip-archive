@@ -23,7 +23,8 @@ export default function App() {
   const [photos, setPhotos] = useState([]);
   const [guestName, setGuestName] = useState('');
   const [caption, setCaption] = useState(captions[0]);
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
+const [uploadProgress, setUploadProgress] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
