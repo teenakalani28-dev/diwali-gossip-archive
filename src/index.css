@@ -1,38 +1,212 @@
 
-/* RESTORE PHOTO PREVIEW STYLING */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Caveat:wght@500;600&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #294537;
+  background: #f5ebdf;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ivory: #f5ebdf;
+  --paper: #fffaf3;
+  --green: #294537;
+  --rose: #d69b9c;
+  --rose-dark: #ad6d76;
+  --gold: #c6a15b;
+  --ink: #303b32;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--ivory);
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 570px;
+  padding: 55px 24px 65px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--ivory);
+  border-bottom: 1px solid #e4d6c8;
+}
+
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 190px;
+  height: 250px;
+  background: var(--rose);
+  opacity: .17;
+  border-radius: 48% 52% 42% 58%;
+  transform: rotate(28deg);
+  pointer-events: none;
+}
+
+.hero::before {
+  top: -120px;
+  left: -65px;
+}
+
+.hero::after {
+  bottom: -150px;
+  right: -60px;
+  background: var(--gold);
+}
+
+.hero h1 {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 18px auto;
+  color: var(--green);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(42px, 8vw, 82px);
+  line-height: 1.04;
+  font-weight: 500;
+  letter-spacing: -2px;
+}
+
+.hero p {
+  position: relative;
+  z-index: 1;
+  color: #776d61;
+  font-size: 14px;
+  letter-spacing: .04em;
+  line-height: 1.8;
+}
+
+.hero button,
+.upload-section button,
+.upload-section .upload-button {
+  border: 0;
+  border-radius: 3px;
+  background: var(--green);
+  color: white;
+  padding: 13px 24px;
+  letter-spacing: .08em;
+  font-size: 11px;
+  font-weight: 600;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.hero button:hover,
+.upload-section button:hover {
+  background: var(--rose-dark);
+  transform: translateY(-2px);
+}
+
+.upload-section {
+  max-width: 720px;
+  margin: 42px auto;
+  padding: 30px;
+  background: var(--paper);
+  border: 1px solid #e8dcd0;
+  border-radius: 5px;
+  box-shadow: 0 8px 28px rgba(70, 49, 39, .05);
+}
+
+.upload-section h2,
+.gallery-section h2 {
+  color: var(--green);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 500;
+}
+
+.upload-section input,
+.upload-section textarea,
+.upload-section select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dfd1c4;
+  border-radius: 3px;
+  background: #fffdf9;
+  color: var(--ink);
+}
+
+.gallery-section {
+  padding: 50px 24px 80px;
+  background: var(--ivory);
+}
+
+.gallery-section h2 {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.gallery-section > p {
+  text-align: center;
+  color: #81756b;
+  font-size: 13px;
+}
+
+.gallery-section .photo-grid,
+.gallery-section .gallery-grid {
+  max-width: 1120px;
+  margin: 38px auto;
+  column-count: 3;
+  column-gap: 24px;
+}
 
 .photo-card {
   display: inline-block;
   width: 100%;
   break-inside: avoid;
-  margin: 0 0 24px;
+  margin: 0 0 28px;
   padding: 10px 10px 22px;
-  background: #FFF9EF;
-  border: 1px solid #E6DDCF;
+  background: var(--paper);
+  border: 1px solid #e8dfd4;
   border-radius: 2px;
-  box-shadow: 0 5px 18px rgba(38, 40, 30, 0.09);
+  box-shadow: 0 7px 20px rgba(47, 48, 37, .09);
   transition: transform .25s ease, box-shadow .25s ease;
 }
 
 .photo-card:nth-child(4n+1) {
-  transform: rotate(-1.5deg);
+  transform: rotate(-1.4deg);
 }
 
 .photo-card:nth-child(4n+2) {
-  transform: rotate(1.2deg);
+  transform: rotate(1.1deg);
 }
 
 .photo-card:nth-child(4n+3) {
-  transform: rotate(-0.7deg);
+  transform: rotate(.5deg);
 }
 
 .photo-card:nth-child(4n) {
-  transform: rotate(1.7deg);
+  transform: rotate(-.8deg);
 }
 
 .photo-card:hover {
-  transform: rotate(0deg) translateY(-5px);
-  box-shadow: 0 12px 25px rgba(38, 40, 30, 0.14);
+  transform: rotate(0) translateY(-4px);
+  box-shadow: 0 12px 26px rgba(47, 48, 37, .14);
 }
 
 .photo-card img {
@@ -40,14 +214,46 @@
   width: 100%;
   height: auto;
   object-fit: cover;
-  border-radius: 1px;
 }
 
 .photo-card p,
 .photo-card .caption {
-  color: #285B45;
-  font-family: 'Playfair Display', serif;
-  font-size: 14px;
-  text-align: center;
   padding: 12px 4px 0;
+  margin: 0;
+  text-align: center;
+  color: var(--green);
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+}
+
+footer {
+  padding: 30px 20px;
+  text-align: center;
+  background: var(--green);
+  color: #f5ebdf;
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+
+@media (max-width: 700px) {
+  .hero {
+    min-height: 490px;
+    padding: 55px 22px;
+  }
+
+  .gallery-section .photo-grid,
+  .gallery-section .gallery-grid {
+    column-count: 2;
+    column-gap: 16px;
+  }
+
+  .photo-card {
+    padding: 7px 7px 17px;
+    margin-bottom: 19px;
+  }
+
+  .upload-section {
+    margin: 25px 15px;
+    padding: 22px;
+  }
 }
