@@ -349,4 +349,97 @@ footer span {
   .gallery-heading h2 {
     font-size: 34px;
   }
+}/* POLAROID PHOTO WALL */
+
+.hero::before,
+.hero::after {
+  display: none !important;
+}
+
+.gallery-section {
+  background: #fff8e9;
+  padding: 48px 20px;
+}
+
+.gallery-section h2 {
+  color: #124c38;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: -1px;
+}
+
+.gallery-section .photo-grid,
+.gallery-section .gallery-grid {
+  column-count: 3;
+  column-gap: 22px;
+}
+
+.photo-card {
+  display: inline-block;
+  width: 100%;
+  break-inside: avoid;
+  background: #fff;
+  padding: 10px 10px 22px;
+  margin: 0 0 24px;
+  border: 1px solid #eee8df;
+  border-radius: 2px;
+  box-shadow: 0 5px 18px rgba(38, 40, 30, 0.09);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.photo-card:nth-child(4n+1) {
+  transform: rotate(-1.5deg);
+}
+
+.photo-card:nth-child(4n+2) {
+  transform: rotate(1.2deg);
+}
+
+.photo-card:nth-child(4n+3) {
+  transform: rotate(-0.7deg);
+}
+
+.photo-card:nth-child(4n) {
+  transform: rotate(1.7deg);
+}
+
+.photo-card:hover {
+  transform: rotate(0deg) translateY(-5px);
+  box-shadow: 0 12px 25px rgba(38, 40, 30, 0.14);
+}
+
+.photo-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 1px;
+}
+
+.photo-card p,
+.photo-card .caption {
+  color: #244b3b;
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  text-align: center;
+  padding: 12px 4px 0;
+}
+
+@media (max-width: 700px) {
+  .gallery-section .photo-grid,
+  .gallery-section .gallery-grid {
+    column-count: 2;
+    column-gap: 15px;
+  }
+
+  .photo-card {
+    padding: 7px 7px 17px;
+    margin-bottom: 17px;
+  }
+}
+
+@media (max-width: 380px) {
+  .gallery-section .photo-grid,
+  .gallery-section .gallery-grid {
+    column-count: 2;
+  }
 }
