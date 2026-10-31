@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import './index.css';
@@ -28,6 +27,26 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
+  const [adminMode, setAdminMode] = useState(
+    window.location.hash === '#admin'
+  );
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminUser, setAdminUser] = useState(null);
+  const [adminChecking, setAdminChecking] = useState(false);
+  const [adminMessage, setAdminMessage] = useState('');
+  const [busyPhotoId, setBusyPhotoId] = useState(null);
+
+  useEffect(() => {
+    function handleHashChange() {
+      setAdminMode(window.location.hash === '#admin');
+      setAdminMessage('');
+    }
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   async function loadPhotos() {
     const { data, error } = await supabase
       .from('Photos')
@@ -43,6 +62,155 @@ export default function App() {
     const timer = setInterval(loadPhotos, 5000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (adminMode) checkAdminSession();
+    else setAdminUser(null);
+  }, [adminMode]);
+
+  async function checkAdminSession() {
+    setAdminChecking(true);
+    setAdminMessage('');
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      if (!sessionData.session) {
+        setAdminUser(null);
+        return;
+      }
+
+      const { data: isAdmin, error } = await supabase.rpc(
+        'is_archive_admin'
+      );
+
+      if (error || !isAdmin) {
+        await supabase.auth.signOut();
+        setAdminUser(null);
+        setAdminMessage('This account is not authorised for the archive.');
+        return;
+      }
+
+      setAdminUser(sessionData.session.user);
+    } catch (error) {
+      setAdminUser(null);
+      setAdminMessage(error.message);
+    } finally {
+      setAdminChecking(false);
+    }
+  }
+
+  async function adminLogin(e) {
+    e.preventDefault();
+    setAdminChecking(true);
+    setAdminMessage('');
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: adminEmail.trim(),
+        password: adminPassword
+      });
+
+      if (error) throw error;
+
+      const { data: isAdmin, error: adminError } = await supabase.rpc(
+        'is_archive_admin'
+      );
+
+      if (adminError) throw adminError;
+
+      if (!isAdmin) {
+        await supabase.auth.signOut();
+        throw new Error('This account is not authorised for the archive.');
+      }
+
+      setAdminUser(data.user);
+      setAdminPassword('');
+      await loadPhotos();
+    } catch (error) {
+      setAdminMessage(error.message);
+    } finally {
+      setAdminChecking(false);
+    }
+  }
+
+  async function adminLogout() {
+    await supabase.auth.signOut();
+    setAdminUser(null);
+    setAdminMessage('');
+    window.location.hash = '';
+  }
+
+  async function toggleFeatured(photo) {
+    setBusyPhotoId(photo.id);
+    setAdminMessage('');
+
+    try {
+      const { error } = await supabase
+        .from('Photos')
+        .update({ Featured: !photo.Featured })
+        .eq('id', photo.id);
+
+      if (error) throw error;
+
+      await loadPhotos();
+      setAdminMessage(
+        photo.Featured ? 'Photo unfeatured.' : 'Photo featured.'
+      );
+    } catch (error) {
+      setAdminMessage(`Could not update photo: ${error.message}`);
+    } finally {
+      setBusyPhotoId(null);
+    }
+  }
+
+  async function deletePhoto(photo) {
+    const confirmed = window.confirm(
+      'Delete this photo permanently? This cannot be undone.'
+    );
+
+    if (!confirmed) return;
+
+    setBusyPhotoId(photo.id);
+    setAdminMessage('');
+
+    try {
+      const marker = '/diwali-photos/';
+      const imageUrl = photo.image_url || '';
+      const markerIndex = imageUrl.indexOf(marker);
+
+      if (markerIndex === -1) {
+        throw new Error('Could not identify the stored image file.');
+      }
+
+      const path = decodeURIComponent(
+        imageUrl.substring(markerIndex + marker.length)
+      );
+
+      const { error: storageError } = await supabase.storage
+        .from('diwali-photos')
+        .remove([path]);
+
+      if (storageError) throw storageError;
+
+      const { error: deleteError } = await supabase
+        .from('Photos')
+        .delete()
+        .eq('id', photo.id);
+
+      if (deleteError) throw deleteError;
+
+      await loadPhotos();
+      setAdminMessage('Photo deleted from the archive.');
+    } catch (error) {
+      setAdminMessage(`Delete failed: ${error.message}`);
+    } finally {
+      setBusyPhotoId(null);
+    }
+  }
 
   async function uploadPhoto(e) {
     e.preventDefault();
@@ -103,6 +271,133 @@ export default function App() {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (adminMode) {
+    return (
+      <main className="archive" style={{ minHeight: '100vh', padding: '32px 20px' }}>
+        <section style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <p className="eyebrow">THE OFFICIAL AFTER-PARTY RECORD</p>
+          <h1 style={{ marginBottom: '12px' }}>
+            ARCHIVE <span>ADMIN</span>
+          </h1>
+          <p className="subtitle">Private access. Behind the evidence.</p>
+
+          {adminChecking ? (
+            <p>Checking access...</p>
+          ) : !adminUser ? (
+            <form
+              onSubmit={adminLogin}
+              className="upload-form"
+              style={{ maxWidth: '440px', margin: '35px auto' }}
+            >
+              <h2>Admin login</h2>
+
+              <label className="field-label">EMAIL</label>
+              <input
+                type="email"
+                value={adminEmail}
+                onChange={e => setAdminEmail(e.target.value)}
+                placeholder="Admin email"
+                required
+              />
+
+              <label className="field-label">PASSWORD</label>
+              <input
+                type="password"
+                value={adminPassword}
+                onChange={e => setAdminPassword(e.target.value)}
+                placeholder="Password"
+                required
+              />
+
+              <button type="submit" disabled={adminChecking}>
+                {adminChecking ? 'VERIFYING...' : 'ACCESS ARCHIVE'}
+              </button>
+
+              {adminMessage && (
+                <p className="status-message">{adminMessage}</p>
+              )}
+            </form>
+          ) : (
+            <>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '12px',
+                margin: '30px 0'
+              }}>
+                <div>
+                  <p className="section-kicker">CONTROL ROOM</p>
+                  <h2>{photos.length} photos on record</h2>
+                  <p>{adminUser.email}</p>
+                </div>
+
+                <button type="button" onClick={adminLogout}>
+                  LOG OUT
+                </button>
+              </div>
+
+              {adminMessage && (
+                <p className="status-message">{adminMessage}</p>
+              )}
+
+              <button
+                type="button"
+                onClick={loadPhotos}
+                style={{ marginBottom: '20px' }}
+              >
+                REFRESH PHOTOS
+              </button>
+
+              <div className="gallery">
+                {photos.map(photo => (
+                  <article className="photo-card" key={photo.id}>
+                    <img
+                      src={photo.image_url}
+                      alt={photo.caption || 'Diwali memory'}
+                      loading="lazy"
+                    />
+
+                    <div className="photo-info">
+                      <p>{photo.caption}</p>
+                      <span>{photo.Guest_name || 'Anonymous'}</span>
+
+                      <p style={{ marginTop: '10px' }}>
+                        {photo.Featured ? 'FEATURED' : 'NOT FEATURED'}
+                      </p>
+
+                      <button
+                        type="button"
+                        disabled={busyPhotoId === photo.id}
+                        onClick={() => toggleFeatured(photo)}
+                      >
+                        {busyPhotoId === photo.id
+                          ? 'PLEASE WAIT...'
+                          : photo.Featured
+                            ? 'UNFEATURE'
+                            : 'FEATURE PHOTO'}
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={busyPhotoId === photo.id}
+                        onClick={() => deletePhoto(photo)}
+                        style={{ marginTop: '8px' }}
+                      >
+                        DELETE PHOTO
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
+          )}
+        </section>
+      </main>
+    );
   }
 
   return (
