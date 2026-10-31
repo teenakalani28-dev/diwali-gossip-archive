@@ -7,21 +7,21 @@
 ========================================= */
 
 :root {
---butter: #F4C85A;
---moss: #777B4B;
---palm: #285B45;
---guava: #E98B91;
---sunset: #E97850;
---sangria: #762D49;
---sea: #A8D3C7;
---lagoon: #397F83;
---odyssey: #344B68;
+  --butter: #F5C842;
+  --moss: #777B4B;
+  --palm: #285B45;
+  --guava: #FF1681;
+  --sunset: #E7472D;
+  --sangria: #762D49;
+  --sea: #A8D3C7;
+  --lagoon: #397F83;
+  --odyssey: #344B68;
 
-  --paper: #FFFCF5;
-  --cream: #F7F0E3;
+  --paper: #FFF1DF;
+  --cream: #F9EEDB;
   --ink: #293C34;
   --muted: #81796B;
-  --border: #E8DDCC;
+}
 
   font-family: 'DM Sans', sans-serif;
   color: var(--ink);
