@@ -1,10 +1,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Caveat:wght@500;600;700&display=swap');
 
-/* =================================
-   DIWALI GOSSIP ARCHIVE
-   Modern Indian Scrapbook Aesthetic
-================================= */
+/* =========================================
+   DIWALI KI GOSSIP ARCHIVE
+   THE SCRAPBOOK EDITION
+========================================= */
 
 :root {
   --butter: #F6D978;
@@ -17,10 +17,11 @@
   --lagoon: #397F83;
   --odyssey: #344B68;
 
-  --paper: #FFF9EF;
-  --cream: #F8F0DF;
+  --paper: #FFFCF5;
+  --cream: #F7F0E3;
   --ink: #293C34;
   --muted: #81796B;
+  --border: #E8DDCC;
 
   font-family: 'DM Sans', sans-serif;
   color: var(--ink);
@@ -43,7 +44,10 @@ body {
   background: var(--cream);
 }
 
-button, input, textarea, select {
+button,
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -55,250 +59,434 @@ button {
   min-height: 100vh;
 }
 
-/* =================================
-   PAGE BACKGROUND
-================================= */
+/* =========================================
+   MAIN ARCHIVE
+========================================= */
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 8% 12%, rgba(233,154,154,.13), transparent 25%),
-    radial-gradient(circle at 90% 70%, rgba(168,211,199,.17), transparent 28%);
+.archive {
+  width: 100%;
+  overflow: hidden;
+  background: var(--cream);
 }
 
-/* =================================
-   HERO / OPENING
-================================= */
+/* =========================================
+   OPENING — SCRAPBOOK COVER
+========================================= */
 
 .hero {
-  min-height: 650px;
+  min-height: 590px;
   position: relative;
+  isolation: isolate;
   overflow: hidden;
-  padding: 75px 24px 85px;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  padding: 85px 25px 75px;
   text-align: center;
+
   background: var(--butter);
-  isolation: isolate;
+  color: var(--palm);
 }
+
+/* Decorative scrapbook paper shapes */
 
 .hero::before {
   content: "";
   position: absolute;
-  width: 310px;
-  height: 390px;
-  left: -125px;
-  top: -90px;
-  background: var(--guava);
-  opacity: .8;
-  border-radius: 48% 52% 65% 35%;
-  transform: rotate(35deg);
   z-index: -1;
+  width: 310px;
+  height: 370px;
+  top: -155px;
+  left: -100px;
+  background: var(--guava);
+  opacity: .78;
+  border-radius: 48% 52% 60% 40%;
+  transform: rotate(35deg);
 }
 
 .hero::after {
   content: "";
   position: absolute;
-  width: 290px;
-  height: 350px;
-  right: -110px;
-  bottom: -140px;
-  background: var(--sea);
-  border-radius: 50%;
-  transform: rotate(-25deg);
   z-index: -1;
+  width: 280px;
+  height: 330px;
+  right: -100px;
+  bottom: -155px;
+  background: var(--sea);
+  border-radius: 48% 52% 42% 58%;
+  transform: rotate(-25deg);
 }
+
+/* Small top label */
+
+.hero .eyebrow {
+  margin: 0 0 23px;
+  color: var(--sangria);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .23em;
+  text-transform: uppercase;
+}
+
+/* Main title */
 
 .hero h1 {
-  max-width: 900px;
-  margin: 22px auto;
+  margin: 0;
   color: var(--palm);
   font-family: 'Playfair Display', serif;
-  font-size: clamp(46px, 8vw, 92px);
+  font-size: clamp(43px, 8vw, 86px);
   font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -2.5px;
+  line-height: 1.08;
+  letter-spacing: -2px;
 }
 
-.hero p {
-  max-width: 540px;
+.hero h1 span {
+  color: var(--sangria);
+  font-style: italic;
+}
+
+/* Subtitle */
+
+.hero .subtitle {
+  margin: 22px 0 24px;
   color: var(--odyssey);
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.8;
-  letter-spacing: .04em;
+  letter-spacing: .035em;
 }
 
-.hero button {
-  margin-top: 25px;
-  padding: 15px 30px;
-  background: var(--sangria);
-  color: white;
-  border: 1px solid var(--sangria);
-  border-radius: 3px;
-  font-size: 11px;
+/* Live archive label */
+
+.hero .live {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 16px;
+  background: rgba(255,252,245,.7);
+  border: 1px solid rgba(40,91,69,.18);
+  border-radius: 30px;
+  color: var(--palm);
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: .13em;
-  transition: .25s ease;
 }
 
-.hero button:hover {
-  background: var(--palm);
-  border-color: var(--palm);
-  transform: translateY(-3px);
+.live-dot {
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  background: var(--sunset);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(231,125,85,.15);
 }
 
-/* =================================
+/* Photo counter */
+
+.hero .photo-count {
+  margin-top: 19px;
+  color: var(--moss);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .15em;
+}
+
+/* =========================================
    UPLOAD SECTION
-================================= */
+========================================= */
 
 .upload-section {
   position: relative;
-  max-width: 760px;
-  margin: 65px auto;
-  padding: 38px;
+  width: min(90%, 660px);
+  margin: 65px auto 75px;
+  padding: 40px 42px;
+
   background: var(--paper);
-  border: 1px solid rgba(119,123,75,.25);
-  border-radius: 4px;
-  box-shadow: 10px 12px 0 rgba(233,154,154,.22);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+
+  box-shadow:
+    9px 10px 0 rgba(233,154,154,.22),
+    0 15px 35px rgba(45,55,40,.05);
+}
+
+/* Decorative tape */
+
+.upload-section::before {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 23px;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  background: rgba(233,154,154,.55);
+  opacity: .85;
+}
+
+.section-kicker {
+  margin: 0 0 10px;
+  color: var(--sunset);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .2em;
 }
 
 .upload-section h2 {
-  color: var(--sangria);
+  margin: 0;
+  color: var(--palm);
   font-family: 'Playfair Display', serif;
-  font-size: clamp(27px, 4vw, 40px);
+  font-size: clamp(30px, 5vw, 43px);
   font-weight: 500;
+  line-height: 1.2;
 }
 
-.upload-section p {
+.upload-section .description {
+  margin: 13px 0 29px;
   color: var(--muted);
-  line-height: 1.7;
+  font-size: 13px;
+  line-height: 1.8;
 }
 
-.upload-section input,
-.upload-section textarea,
-.upload-section select {
+/* Upload form */
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.field-label {
+  margin-top: 10px;
+  color: var(--moss);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.upload-form input:not([type="file"]),
+.upload-form select {
   width: 100%;
-  padding: 14px;
-  margin: 7px 0;
+  min-height: 47px;
+  padding: 12px 14px;
+
   color: var(--ink);
-  background: #FFFCF6;
-  border: 1px solid #DED7C7;
+  background: #FFFDF8;
+
+  border: 1px solid var(--border);
   border-radius: 3px;
   outline: none;
+
+  font-size: 13px;
+  transition: border-color .2s, box-shadow .2s;
 }
 
-.upload-section input:focus,
-.upload-section textarea:focus,
-.upload-section select:focus {
+.upload-form input::placeholder {
+  color: #A49A8C;
+}
+
+.upload-form input:focus,
+.upload-form select:focus {
   border-color: var(--lagoon);
-  box-shadow: 0 0 0 3px rgba(57,127,131,.12);
+  box-shadow: 0 0 0 3px rgba(57,127,131,.10);
 }
 
-.upload-section button,
-.upload-section .upload-button {
-  padding: 14px 25px;
-  background: var(--palm);
-  color: white;
-  border: none;
+.upload-form input[type="file"] {
+  width: 100%;
+  padding: 13px;
+  color: var(--muted);
+  background: #F8F3E9;
+  border: 1px dashed #C7BCA9;
   border-radius: 3px;
-  font-weight: 600;
   font-size: 12px;
-  letter-spacing: .08em;
-  transition: .2s ease;
 }
 
-.upload-section button:hover,
-.upload-section .upload-button:hover {
+.upload-form input[type="file"]::file-selector-button {
+  padding: 9px 13px;
+  margin-right: 12px;
+  color: white;
+  background: var(--moss);
+  border: none;
+  border-radius: 2px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.file-name {
+  margin: 0;
+  color: var(--lagoon);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+/* Upload button */
+
+.upload-form button {
+  width: 100%;
+  min-height: 49px;
+  margin-top: 12px;
+  padding: 14px 20px;
+
+  color: var(--paper);
+  background: var(--palm);
+  border: 1px solid var(--palm);
+  border-radius: 3px;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+
+  transition: background .2s, transform .2s;
+}
+
+.upload-form button:hover {
   background: var(--sangria);
+  border-color: var(--sangria);
   transform: translateY(-2px);
 }
 
-/* =================================
-   GALLERY
-================================= */
+.upload-form button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.status-message {
+  margin: 9px 0 0;
+  padding: 12px;
+  color: var(--palm);
+  background: rgba(168,211,199,.22);
+  border-left: 3px solid var(--lagoon);
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   GALLERY HEADING
+========================================= */
 
 .gallery-section {
-  padding: 75px 28px 95px;
+  padding: 65px 35px 90px;
   background: var(--cream);
 }
 
-.gallery-section h2 {
+.gallery-heading {
+  max-width: 1180px;
+  margin: 0 auto 42px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.gallery-heading .section-kicker {
+  color: var(--sunset);
+}
+
+.gallery-heading h2 {
+  margin: 0;
   color: var(--palm);
   font-family: 'Playfair Display', serif;
-  font-size: clamp(34px, 5vw, 54px);
+  font-size: clamp(30px, 5vw, 49px);
   font-weight: 500;
-  text-align: center;
+  line-height: 1.15;
   letter-spacing: -1px;
 }
 
-.gallery-section > p {
-  color: var(--muted);
+.gallery-heading > span {
+  flex-shrink: 0;
+  padding: 9px 13px;
+  color: var(--sangria);
+  background: rgba(233,154,154,.18);
+  border: 1px solid rgba(118,45,73,.12);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+}
+
+/* =========================================
+   EMPTY GALLERY
+========================================= */
+
+.empty-state {
+  max-width: 500px;
+  margin: 45px auto;
+  padding: 40px 25px;
+  color: var(--moss);
+  background: var(--paper);
+  border: 1px dashed #C8BCA8;
   text-align: center;
-  font-size: 13px;
-  letter-spacing: .06em;
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-style: italic;
+  line-height: 1.7;
 }
 
-.gallery-section .photo-grid,
-.gallery-section .gallery-grid {
+/* =========================================
+   POLAROID PHOTO WALL
+========================================= */
+
+.gallery {
   max-width: 1180px;
-  margin: 48px auto;
+  margin: 0 auto;
+
   column-count: 3;
-  column-gap: 28px;
+  column-gap: 30px;
 }
 
-/* =================================
-   POLAROID PHOTO CARDS
-================================= */
+/* Individual Polaroid */
 
 .photo-card {
-  position: relative;
   display: inline-block;
+  position: relative;
   width: 100%;
   break-inside: avoid;
-  margin: 0 0 32px;
-  padding: 11px 11px 25px;
-  background: var(--paper);
-  border: 1px solid #E6DDCF;
+
+  margin: 0 0 31px;
+  padding: 11px 11px 0;
+
+  background: #FFFCF7;
+  border: 1px solid #E8E0D5;
   border-radius: 2px;
-  box-shadow: 0 8px 20px rgba(48,54,40,.09);
-  transition: transform .3s ease, box-shadow .3s ease;
+
+  box-shadow: 0 7px 19px rgba(43,49,39,.10);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
 }
 
+/* Natural scrapbook rotations */
+
 .photo-card:nth-child(6n+1) {
-  transform: rotate(-2deg);
+  transform: rotate(-1.5deg);
 }
 
 .photo-card:nth-child(6n+2) {
-  transform: rotate(1.5deg);
+  transform: rotate(1.2deg);
 }
 
 .photo-card:nth-child(6n+3) {
-  transform: rotate(-.8deg);
+  transform: rotate(-.7deg);
 }
 
 .photo-card:nth-child(6n+4) {
-  transform: rotate(2deg);
+  transform: rotate(1.8deg);
 }
 
 .photo-card:nth-child(6n+5) {
-  transform: rotate(-1.2deg);
+  transform: rotate(-1deg);
 }
 
 .photo-card:nth-child(6n) {
   transform: rotate(.8deg);
 }
 
-.photo-card:hover {
-  transform: rotate(0deg) translateY(-6px);
-  box-shadow: 0 16px 30px rgba(48,54,40,.16);
-  z-index: 2;
-}
+/* Photo itself */
 
 .photo-card img {
   display: block;
@@ -308,92 +496,212 @@ body::before {
   border-radius: 1px;
 }
 
-.photo-card p,
-.photo-card .caption {
-  margin: 0;
-  padding: 13px 4px 0;
+/* White caption area */
+
+.photo-info {
+  min-height: 79px;
+  padding: 12px 7px 15px;
   text-align: center;
+}
+
+.photo-info p {
+  margin: 0;
   color: var(--sangria);
   font-family: 'Caveat', cursive;
-  font-size: 21px;
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
-/* =================================
-   LINKS AND SMALL LABELS
-================================= */
-
-a {
-  color: var(--lagoon);
-  text-decoration: none;
+.photo-info span {
+  display: block;
+  margin-top: 6px;
+  color: var(--moss);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 
-a:hover {
-  color: var(--sangria);
+/* Hover effect */
+
+.photo-card:hover {
+  transform: rotate(0deg) translateY(-6px);
+  box-shadow: 0 16px 30px rgba(43,49,39,.16);
+  z-index: 2;
 }
 
-/* =================================
+/* =========================================
    FOOTER
-================================= */
+========================================= */
 
 footer {
-  padding: 42px 20px;
+  padding: 44px 20px 38px;
   text-align: center;
   color: var(--paper);
   background: var(--palm);
-  font-size: 12px;
-  letter-spacing: .12em;
 }
 
-/* =================================
-   RESPONSIVE DESIGN
-================================= */
+footer p {
+  margin: 0 0 12px;
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: .06em;
+}
 
-@media (max-width: 760px) {
-  .hero {
-    min-height: 540px;
-    padding: 65px 22px;
-  }
+footer span {
+  color: var(--butter);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .18em;
+}
 
-  .hero h1 {
-    font-size: clamp(43px, 12vw, 66px);
-    letter-spacing: -1.5px;
-  }
+/* =========================================
+   RESPONSIVE — TABLETS
+========================================= */
 
-  .upload-section {
-    margin: 35px 17px;
-    padding: 25px 20px;
+@media (max-width: 900px) {
+  .gallery {
+    column-count: 2;
+    column-gap: 22px;
   }
 
   .gallery-section {
-    padding: 55px 17px 70px;
-  }
-
-  .gallery-section .photo-grid,
-  .gallery-section .gallery-grid {
-    column-count: 2;
-    column-gap: 17px;
-    margin-top: 35px;
-  }
-
-  .photo-card {
-    padding: 8px 8px 18px;
-    margin-bottom: 21px;
-  }
-
-  .photo-card p,
-  .photo-card .caption {
-    font-size: 18px;
+    padding-left: 25px;
+    padding-right: 25px;
   }
 }
 
-@media (max-width: 380px) {
+/* =========================================
+   RESPONSIVE — MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
   .hero {
-    min-height: 480px;
+    min-height: 520px;
+    padding: 65px 20px;
   }
 
-  .gallery-section .photo-grid,
-  .gallery-section .gallery-grid {
-    column-count: 2;
-    column-gap: 12px;
+  .hero h1 {
+    font-size: clamp(39px, 11vw, 61px);
+    letter-spacing: -1.5px;
   }
+
+  .hero .eyebrow {
+    font-size: 9px;
+    letter-spacing: .16em;
+  }
+
+  .hero .subtitle {
+    max-width: 290px;
+    font-size: 13px;
+  }
+
+  .hero::before {
+    width: 200px;
+    height: 240px;
+    left: -100px;
+    top: -85px;
+  }
+
+  .hero::after {
+    width: 190px;
+    height: 220px;
+    right: -90px;
+    bottom: -100px;
+  }
+
+  .upload-section {
+    width: calc(100% - 34px);
+    margin: 48px auto 60px;
+    padding: 29px 22px;
+  }
+
+  .upload-section h2 {
+    font-size: 33px;
+  }
+
+  .gallery-section {
+    padding: 48px 17px 65px;
+  }
+
+  .gallery-heading {
+    align-items: flex-end;
+    margin-bottom: 31px;
+    gap: 10px;
+  }
+
+  .gallery-heading h2 {
+    font-size: clamp(27px, 7vw, 37px);
+  }
+
+  .gallery-heading > span {
+    padding: 8px;
+    font-size: 9px;
+  }
+
+  .gallery {
+    column-count: 2;
+    column-gap: 15px;
+  }
+
+  .photo-card {
+    padding: 7px 7px 0;
+    margin-bottom: 20px;
+  }
+
+  .photo-info {
+    min-height: 65px;
+    padding: 10px 3px 12px;
+  }
+
+  .photo-info p {
+    font-size: 19px;
+  }
+
+  .photo-info span {
+    font-size: 8px;
+  }
+
+  footer {
+    padding: 35px 16px;
+  }
+}
+
+/* =========================================
+   EXTRA SMALL PHONES
+========================================= */
+
+@media (max-width: 360px) {
+  .hero h1 {
+    font-size: 37px;
+  }
+
+  .gallery {
+    column-gap: 11px;
+  }
+
+  .photo-card {
+    margin-bottom: 16px;
+  }
+
+  .photo-info p {
+    font-size: 17px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+::selection {
+  background: var(--guava);
+  color: var(--sangria);
+}
+
+:focus-visible {
+  outline: 2px solid var(--lagoon);
+  outline-offset: 3px;
 }
