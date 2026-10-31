@@ -370,7 +370,8 @@ button {
 
 .gallery-section {
   padding: 65px 35px 90px;
-  background: var(--cream);
+  background: #E9E6D5;
+  position: relative;
 }
 
 .gallery-heading {
@@ -389,12 +390,11 @@ button {
 
 .gallery-heading h2 {
   margin: 0;
-  color: var(--palm);
+  color: #285B45;
   font-family: 'Playfair Display', serif;
   font-size: clamp(30px, 5vw, 49px);
   font-weight: 500;
   line-height: 1.15;
-  letter-spacing: -1px;
 }
 
 .gallery-heading > span {
@@ -506,20 +506,23 @@ button {
 
 .photo-info p {
   margin: 0;
-  color: var(--sangria);
-  font-family: 'Caveat', cursive;
-  font-size: 23px;
-  font-weight: 600;
-  line-height: 1.25;
+  color: #762D49;
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: .01em;
 }
 
 .photo-info span {
   display: block;
-  margin-top: 6px;
-  color: var(--moss);
+  margin-top: 7px;
+  color: #777B4B;
+  font-family: 'DM Sans', sans-serif;
   font-size: 9px;
   font-weight: 600;
-  letter-spacing: .12em;
+  letter-spacing: .13em;
   text-transform: uppercase;
 }
 
