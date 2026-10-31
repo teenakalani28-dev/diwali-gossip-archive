@@ -507,22 +507,22 @@ button {
 .photo-info p {
   margin: 0;
   color: #762D49;
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  font-style: italic;
+  font-family: 'Caveat', cursive;
+  font-size: 19px;
   font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: .01em;
+  line-height: 1.3;
+  text-transform: lowercase;
+  letter-spacing: .02em;
 }
 
 .photo-info span {
   display: block;
-  margin-top: 7px;
+  margin-top: 5px;
   color: #777B4B;
   font-family: 'DM Sans', sans-serif;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: .13em;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: .15em;
   text-transform: uppercase;
 }
 
